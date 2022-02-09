@@ -192,7 +192,7 @@ function UILibrary.Load(GUITitle)
 	
 	Level += 1
 	
-	MainFrame = RoundBox(5)
+	MainFrame = RoundBox(0)
 	MainFrame.ClipsDescendants = true
 	MainFrame.Name = "MainFrame"
 	MainFrame.Size = UDim2.new(1,-50,1,-30)
@@ -211,14 +211,14 @@ function UILibrary.Load(GUITitle)
 	MenuBar.CanvasSize = UDim2.new(0,0,0,0)
 	MenuBar.Parent = MainFrame
 	
-	DisplayFrame = RoundBox(5)
+	DisplayFrame = RoundBox(0)
 	DisplayFrame.Name = "Display"
 	DisplayFrame.ImageColor3 = Color3.fromRGB(20,20,20)
 	DisplayFrame.Size = UDim2.new(1,-115,0,235)
 	DisplayFrame.Position = UDim2.new(0,110,0,30)
 	DisplayFrame.Parent = MainFrame
 	
-	TitleBar = RoundBox(5)
+	TitleBar = RoundBox(0)
 	TitleBar.Name = "TitleBar"
 	TitleBar.ImageColor3 = Color3.fromRGB(40,40,40)
 	TitleBar.Size = UDim2.new(1,-10,0,20)
@@ -285,7 +285,7 @@ function UILibrary.Load(GUITitle)
 	function TabLibrary.AddPage(PageTitle, SearchBarIncluded)
 		local SearchBarIncluded = (SearchBarIncluded == nil) and true or SearchBarIncluded
 		
-		local PageContainer = RoundBox(5)
+		local PageContainer = RoundBox(0)
 		PageContainer.Name = PageTitle
 		PageContainer.Size = UDim2.new(1,0,0,20)
 		PageContainer.LayoutOrder = TabCount
@@ -344,7 +344,7 @@ function UILibrary.Load(GUITitle)
 		DisplayPadding.Parent = DisplayPage
 		
 		if SearchBarIncluded then
-			local SearchBarContainer = RoundBox(5)
+			local SearchBarContainer = RoundBox(0)
 			SearchBarContainer.Name = "SearchBar"
 			SearchBarContainer.ImageColor3 = Color3.fromRGB(35,35,35)
 			SearchBarContainer.Size = UDim2.new(1,0,0,20)
@@ -387,7 +387,7 @@ function UILibrary.Load(GUITitle)
 			ButtonContainer.BackgroundTransparency = 1
 			ButtonContainer.Parent = Parent or DisplayPage
 			
-			local ButtonForeground = RoundBox(5)
+			local ButtonForeground = RoundBox(0)
 			ButtonForeground.Name = "ButtonForeground"
 			ButtonForeground.Size = UDim2.new(1,0,1,0)
 			ButtonForeground.ImageColor3 = Color3.fromRGB(35,35,35)
@@ -424,7 +424,7 @@ function UILibrary.Load(GUITitle)
 			LabelContainer.BackgroundTransparency = 1
 			LabelContainer.Parent = DisplayPage
 			
-			local LabelForeground = RoundBox(5)
+			local LabelForeground = RoundBox(0)
 			LabelForeground.Name = "LabelForeground"
 			LabelForeground.ImageColor3 = Color3.fromRGB(45,45,45)
 			LabelForeground.Size = UDim2.new(1,0,1,0)
@@ -445,7 +445,7 @@ function UILibrary.Load(GUITitle)
 			DropdownContainer.BackgroundTransparency = 1
 			DropdownContainer.Parent = DisplayPage
 			
-			local DropdownForeground = RoundBox(5)
+			local DropdownForeground = RoundBox(0)
 			DropdownForeground.ClipsDescendants = true
 			DropdownForeground.ImageColor3 = Color3.fromRGB(35,35,35)
 			DropdownForeground.Size = UDim2.new(1,0,1,0)
@@ -509,7 +509,7 @@ function UILibrary.Load(GUITitle)
 			ColourTracker.Value = DefaultColour
 			ColourTracker.Parent = PickerContainer
 			
-			local PickerLeftSide, PickerRightSide, PickerFrame = RoundBox(5), RoundBox(5), RoundBox(5)
+			local PickerLeftSide, PickerRightSide, PickerFrame = RoundBox(0), RoundBox(0), RoundBox(0)
 			
 			PickerLeftSide.Size = UDim2.new(1,-22,1,0)
 			PickerLeftSide.ImageColor3 = Color3.fromRGB(35,35,35)
@@ -598,7 +598,7 @@ function UILibrary.Load(GUITitle)
 			SliderContainer.BackgroundTransparency = 1
 			SliderContainer.Parent = Parent or DisplayPage
 			
-			local SliderForeground = RoundBox(5)
+			local SliderForeground = RoundBox(0)
 			SliderForeground.Name = "SliderForeground"
 			SliderForeground.ImageColor3 = Color3.fromRGB(35,35,35)
 			SliderForeground.Size = UDim2.new(1,0,1,0)
@@ -609,7 +609,7 @@ function UILibrary.Load(GUITitle)
 			SliderButton.ZIndex = 6
 			SliderButton.Parent = SliderForeground
 			
-			local SliderFill = RoundBox(5)
+			local SliderFill = RoundBox(0)
 			SliderFill.Size = UDim2.new(DefaultScale,0,1,0)
 			SliderFill.ImageColor3 = Color3.fromRGB(70,70,70)
 			SliderFill.ZIndex = 5
@@ -653,7 +653,7 @@ function UILibrary.Load(GUITitle)
 			ToggleContainer.BackgroundTransparency = 1
 			ToggleContainer.Parent = DisplayPage
 			
-			local ToggleLeftSide, ToggleRightSide, EffectFrame, RightTick = RoundBox(5), RoundBox(5), Frame(), TickIcon()
+			local ToggleLeftSide, ToggleRightSide, EffectFrame, RightTick = RoundBox(0), RoundBox(0), Frame(), TickIcon()
 			local FlatLeft, FlatRight = Frame(), Frame()
 			
 			ToggleLeftSide.Size = UDim2.new(1,-22,1,0)
