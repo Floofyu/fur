@@ -47,9 +47,9 @@ local function FurryIcon(ButtonOrNot)
 	NewFurryIcon.Name = "FurryIcon"
 	NewFurryIcon.BackgroundTransparency = 1
 	NewFurryIcon.Image = "rbxthumb://type=Asset&id=6088108797&w=150&h=150"
-	NewFurryIcon.ImageRectSize = Vector2.new(36, 36)
-	NewFurryIcon.Size = UDim2.new(0,14,0,14)
-	NewFurryIcon.Position = UDim2.new(1,-17,0,3)
+	NewFurryIcon.ImageRectSize = Vector2.new(150, 150)
+	NewFurryIcon.Size = UDim2.new(0,25,0,25)
+	NewFurryIcon.Position = UDim2.new(1,-440,0,-2)
 	NewFurryIcon.ZIndex = Level
 	return NewFurryIcon
 end
@@ -284,7 +284,16 @@ function UILibrary.Load(GUITitle)
 			end
 		end)
 	end)
-	
+
+    HotFurry.MouseButton1Down:Connect(function()
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Hello" ..game.Players.LocalPlayer.Name;
+            Text = "uwu";
+            Icon = "rbxthumb://type=Asset&id=7427600022&w=150&h=150";
+            Duration = 5;
+        });
+	end)
+
 	Level += 1
 	
 	local MenuListLayout
@@ -718,5 +727,3 @@ function UILibrary.Load(GUITitle)
 end
 
 return UILibrary
-
-
