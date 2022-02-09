@@ -49,7 +49,7 @@ local function FurryIcon(ButtonOrNot)
 	NewFurryIcon.Image = "rbxassetid://6088108797"
 	NewFurryIcon.ImageRectSize = Vector2.new(36, 36)
 	NewFurryIcon.Size = UDim2.new(0,14,0,14)
-	NewFurryIcon.Position = UDim2.new(1,17,0,3)
+	NewFurryIcon.Position = UDim2.new(1,+17,0,3)
 	NewFurryIcon.ZIndex = Level
 	return NewNewFurryIcon
 end
