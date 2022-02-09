@@ -51,7 +51,7 @@ local function FurryIcon(ButtonOrNot)
 	NewFurryIcon.Size = UDim2.new(0,14,0,14)
 	NewFurryIcon.Position = UDim2.new(1,-17,0,3)
 	NewFurryIcon.ZIndex = Level
-	return NewNewFurryIcon
+	return NewFurryIcon
 end
 
 local function TickIcon(ButtonOrNot)
