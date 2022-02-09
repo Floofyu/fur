@@ -46,7 +46,7 @@ local function FurryIcon(ButtonOrNot)
 	local NewFurryIcon = Instance.new(ButtonOrNot and "ImageButton" or "ImageLabel")
 	NewFurryIcon.Name = "FurryIcon"
 	NewFurryIcon.BackgroundTransparency = 1
-	NewFurryIcon.Image = "rbxassetid://6088108797"
+	NewFurryIcon.Image = "rbxthumb://type=Asset&id=6088108797&w=150&h=150"
 	NewFurryIcon.ImageRectSize = Vector2.new(36, 36)
 	NewFurryIcon.Size = UDim2.new(0,14,0,14)
 	NewFurryIcon.Position = UDim2.new(1,-17,0,3)
