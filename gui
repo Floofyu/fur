@@ -239,12 +239,12 @@ function UILibrary.Load(GUITitle)
 	
 	Level += 1
 	
-	local MinimiseButton, TitleButton, HotFurry
+	local MinimiseButton, TitleButton, -- HotFurry
 	local MinimiseToggle = true
 
-	HotFurry = FurryIcon(true)
-	HotFurry.Name = "Furry"
-	HotFurry.Parent = TitleBar
+	-- HotFurry = FurryIcon(true)  DISABLED FOR NOW
+	-- HotFurry.Name = "Furry"
+	-- HotFurry.Parent = TitleBar 
 	
 	MinimiseButton = TitleIcon(true)
 	MinimiseButton.Name = "Minimise"
