@@ -239,11 +239,11 @@ function UILibrary.Load(GUITitle)
 	
 	Level += 1
 	
-	local MinimiseButton, TitleButton, -- HotFurry
+	local MinimiseButton, TitleButton -- HotFurry
 	local MinimiseToggle = true
 
 	-- HotFurry = FurryIcon(true)  DISABLED FOR NOW
-	-- HotFurry.Name = "Furry"
+	-- HotFurry.Name = --
 	-- HotFurry.Parent = TitleBar 
 	
 	MinimiseButton = TitleIcon(true)
@@ -285,14 +285,14 @@ function UILibrary.Load(GUITitle)
 		end)
 	end)
 
-    HotFurry.MouseButton1Down:Connect(function()
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Hello" ..game.Players.LocalPlayer.Name;
-            Text = "uwu";
-            Icon = "rbxthumb://type=Asset&id=7427600022&w=150&h=150";
-            Duration = 5;
-        });
-	end)
+ -- HotFurry.MouseButton1Down:Connect(function()
+ --       game.StarterGui:SetCore("SendNotification", {
+  --          Title = "Hello" ..game.Players.LocalPlayer.Name;
+  --          Text = "uwu";
+ --           Icon = "rbxthumb://type=Asset&id=7427600022&w=150&h=150";
+ --           Duration = 5;
+--        });
+--	end)
 
 	Level += 1
 	
