@@ -42,6 +42,18 @@ local function TitleIcon(ButtonOrNot)
 	return NewTitleIcon
 end
 
+local function FurryIcon(ButtonOrNot)
+	local NewFurryIcon = Instance.new(ButtonOrNot and "ImageButton" or "ImageLabel")
+	NewFurryIcon.Name = "FurryIcon"
+	NewFurryIcon.BackgroundTransparency = 1
+	NewFurryIcon.Image = "rbxassetid://6088108797"
+	NewFurryIcon.ImageRectSize = Vector2.new(36, 36)
+	NewFurryIcon.Size = UDim2.new(0,14,0,14)
+	NewFurryIcon.Position = UDim2.new(1,-17,0,3)
+	NewFurryIcon.ZIndex = Level
+	return NewNewFurryIcon
+end
+
 local function TickIcon(ButtonOrNot)
 	local NewTickIcon = Instance.new(ButtonOrNot and "ImageButton" or "ImageLabel")
 	NewTickIcon.Name = "TickIcon"
@@ -227,13 +239,17 @@ function UILibrary.Load(GUITitle)
 	
 	Level += 1
 	
-	local MinimiseButton, TitleButton
+	local MinimiseButton, TitleButton, HotFurry
 	local MinimiseToggle = true
+
+	HotFurry = FurryIcon(true)
+	HotFurry.Name = "Furry"
+	HotFurry.Parent = TitleBar
 	
 	MinimiseButton = TitleIcon(true)
 	MinimiseButton.Name = "Minimise"
 	MinimiseButton.Parent = TitleBar
-	
+
 	TitleButton = TextButton(GUITitle, 14)
 	TitleButton.Name = "TitleButton"
 	TitleButton.Size = UDim2.new(1,-20,1,0)
@@ -702,3 +718,5 @@ function UILibrary.Load(GUITitle)
 end
 
 return UILibrary
+
+
