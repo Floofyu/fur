@@ -71,6 +71,7 @@ bypassing = true
 	local char = plr.Character
 	char:ClearAllChildren()
 	wait(game.Players.RespawnTime + 2.5)
+	repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 	for i=1, 3 do
 	wait(1)
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000,100,0)
