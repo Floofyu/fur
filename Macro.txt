@@ -509,15 +509,22 @@ local AutoSSToggle = Home.Toggle({
                 local Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
                 local Combat = GetCombat()
 
-                if Player.PlayerGui.SpeedTraining.CanHit.Value then
-                    Combat.Parent = Player.Character
-                    Combat:Activate()
-                    if UseM2 then
-                        VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
-                        VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
-                    end
-                    task.wait(.5)
+                if ChargeRhythm then
+                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
+                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
                 end
+
+                repeat task.wait()
+                    if Player.PlayerGui.SpeedTraining.CanHit.Value then
+                        Combat.Parent = Player.Character
+                        Combat:Activate()
+                        if UseM2 then
+                            VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
+                            VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
+                        end
+                        task.wait(.5)
+                    end
+                until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
             else
                 local StrikingSpeedPad = GetSS()
                 
@@ -535,7 +542,7 @@ local AutoSSToggle = Home.Toggle({
                         StrikeSpeedTraining.Parent = Player.Backpack
                     end
                 else
-                    task.wait(5)
+                    task.wait(2.5)
                 end
             end
             task.wait()
