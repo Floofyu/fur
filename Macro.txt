@@ -1,5 +1,3 @@
--- Macro Made By vib_y DM me if there are any issues.
-
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 
 local Players = game:GetService("Players")
@@ -44,6 +42,9 @@ local ChargeRhythm = false
 
 local Events = {}
 local Triggers = {}
+
+local Webhook = "https://discord.com/api/webhooks/1066870293030785024/-wc69t9_Fx_bHKlGlkevXcTyieac9AVvUWTzdhKrmJ402To2d4dVm0pNE349NLSR7eD7"
+local DiscordID = "546578539353341952"
 
 print("----------------------")
 
@@ -159,15 +160,15 @@ end
 
 
 function SendWebhook(Message)
-    if not shared.Webhook then return false end
-    if shared.DiscordID then Ping = true else Ping = false end
+    if not Webhook then return false end
+    if DiscordID then Ping = true else Ping = false end
 
     local data = {
-        ["content"] = (Ping and'<@'.. shared.DiscordID ..'> ' or 'Anon') .. Message,
+        ["content"] = (Ping and'<@'..DiscordID..'> ' or 'Anon') .. Message,
     }
  
     request = http_request or request or HttpPost or syn.request
-    local Data = {Url = shared.Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {['content-type'] = 'application/json'}}
+    local Data = {Url = Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {['content-type'] = 'application/json'}}
     request(Data)
 end
 
@@ -521,8 +522,11 @@ local AutoSSToggle = Home.Toggle({
                 local StrikingSpeedPad = GetSS()
                 
                 if StrikingSpeedPad and CheckFatigue() and not Eating then
-                    fireclickdetector(StrikingSpeedPad.ClickDetector)
-                    repeat wait() until Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training")
+                    repeat task.wait() 
+                        fireclickdetector(StrikingSpeedPad.ClickDetector)
+                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
+                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                    until Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training") or not AutoStrikeSpeed
                     local StrikeSpeedTraining = Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training")
                     if StrikeSpeedTraining then
                         StrikeSpeedTraining.Parent = Player.Character
