@@ -515,14 +515,16 @@ local AutoSSToggle = Home.Toggle({
                 end
 
                 repeat task.wait()
-                    if Player.PlayerGui.SpeedTraining.CanHit.Value then
-                        Combat.Parent = Player.Character
-                        Combat:Activate()
-                        if UseM2 then
-                            VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
-                            VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
+                    if Player.PlayerGui:FindFirstChild("SpeedTraining") then
+                        if Player.PlayerGui.SpeedTraining.CanHit.Value then
+                            Combat.Parent = Player.Character
+                            Combat:Activate()
+                            if UseM2 then
+                                VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
+                                VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
+                            end
+                            task.wait(.5)
                         end
-                        task.wait(.5)
                     end
                 until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
             else
