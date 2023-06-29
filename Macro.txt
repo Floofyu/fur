@@ -1203,6 +1203,22 @@ local AutoEXP = Misc.Toggle({
     Enabled = false
 })
 
+local AutoRun = false
+
+local RunInPlace = Misc.Toggle({
+    Text = "Run in place",
+    Callback = function(Value)
+        AutoRun = Value
+
+        while AutoRun do
+            StartRun()
+            task.wait(.1)
+        end
+        
+    end,
+    Enabled = false
+})
+
 
 local ViewList = {}
 
