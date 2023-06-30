@@ -1298,3 +1298,49 @@ local PlayerListRemoved = Player.PlayerGui.PlayerList.Frame.ScrollF.ChildRemoved
 end)
 
 table.insert(Events, PlayerListRemoved)
+
+local Group = game:GetService("GroupService")
+local groupID = 4800422
+
+local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
+    local PlayerID = Player.UserId
+
+    local Success, Result = pcall(function()
+        return Group:GetGroupsAsync(PlayerID)
+    end)
+    
+    if Success then
+        for _, value in pairs(Result) do
+            if value["Id"] == groupID then
+                print(value["Role"]) -- prints the Role of the player
+                print(value["Rank"]) -- prints the Rank of the player
+                if value["Role"] == "Mod" or value["Role"] == "Associates." or value["Role"] == "Owner" then
+                    AutoCook = false
+                    AutoStrikePower = false
+                    AutoStrikeSpeed = false
+                    AutoMachines = false
+                    AutoEat = false
+                    AutoDura = false
+                    SendWebhook(Player .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. parseDateTime())
+                    PlaySound()
+                end
+            end
+        end
+    else
+        for i,v in pairs(Players:GetChildren()) do
+            if v:IsInGroup(groupID) then
+                local Rank = v:GetRankInGroup(groupID)
+                if Rank > 99 then
+                    AutoCook = false
+                    AutoStrikePower = false
+                    AutoStrikeSpeed = false
+                    AutoMachines = false
+                    AutoEat = false
+                    AutoDura = false
+                    SendWebhook(v .. " " .. v.PlayerId .. " has Joined you at " .. parseDateTime())
+                    PlaySound()
+                end
+            end
+        end
+    end
+end)
