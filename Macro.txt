@@ -932,7 +932,10 @@ local DuraToggle = Dura.Toggle({
                             HealthPercent = (Player.Character.Humanoid.Health/Player.Character.Humanoid.MaxHealth) * 100
                         until not Player.Character:FindFirstChild("DuraTrain") or HealthPercent <= DuraHitUntil or not AutoDura
                         task.wait(1)
-                        DuraTool.Parent = Player.Character
+
+                        pcall(function()
+                            DuraTool.Parent = Player.Character
+                        end)
                         DuraTool:Activate()
 
                         if DuraTakeTurns then
@@ -950,6 +953,8 @@ local DuraToggle = Dura.Toggle({
                                 print("CanEat")
                                 task.wait(0.25)
                             end
+                        else
+                            CanEat = true
                         end
                     end
                 end
