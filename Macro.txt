@@ -43,9 +43,6 @@ local ChargeRhythm = false
 local Events = {}
 local Triggers = {}
 
-local Webhook = "https://discord.com/api/webhooks/1066870293030785024/-wc69t9_Fx_bHKlGlkevXcTyieac9AVvUWTzdhKrmJ402To2d4dVm0pNE349NLSR7eD7"
-local DiscordID = "546578539353341952"
-
 print("----------------------")
 
 local VirtualUser = game:GetService("VirtualUser")
@@ -160,15 +157,15 @@ end
 
 
 function SendWebhook(Message)
-    if not Webhook then return false end
-    if DiscordID then Ping = true else Ping = false end
+    if not shared.Webhook then return false end
+    if shared.DiscordID then Ping = true else Ping = false end
 
     local data = {
-        ["content"] = (Ping and'<@'..DiscordID..'> ' or 'Anon') .. Message,
+        ["content"] = (Ping and'<@'.. shared.DiscordID..'> ' or 'Anon') .. Message,
     }
  
     request = http_request or request or HttpPost or syn.request
-    local Data = {Url = Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {['content-type'] = 'application/json'}}
+    local Data = {Url = shared.Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {['content-type'] = 'application/json'}}
     request(Data)
 end
 
