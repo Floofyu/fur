@@ -9,6 +9,7 @@ local Mouse = Player:GetMouse()
 local AutoCook = false
 local AutoStrikePower = false
 local AutoStrikeSpeed = false
+local SSTiming = 1
 local TargetBodyHeat = 30
 local MinStam = 5
 local MaxStam = 65
@@ -496,62 +497,6 @@ local AutoSPToggle = Home.Toggle({
     Enabled = false
 })
 
-local AutoSSToggle = Home.Toggle({
-    Text = "Auto StrikeSpeed",
-    Callback = function(Value)
-        AutoStrikeSpeed = Value
-
-        while AutoStrikeSpeed and CheckFatigue() do
-
-            if Player.PlayerGui:FindFirstChild("SpeedTraining") and CheckFatigue() and not Eating then
-                local Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
-                local Combat = GetCombat()
-
-                if ChargeRhythm then
-                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
-                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
-                end
-
-                repeat task.wait()
-                    if Player.PlayerGui:FindFirstChild("SpeedTraining") then
-                        if Player.PlayerGui.SpeedTraining.CanHit.Value then
-                            Combat.Parent = Player.Character
-                            Combat:Activate()
-                            if UseM2 then
-                                VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
-                                VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
-                            end
-                            task.wait(.5)
-                        end
-                    end
-                until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
-            else
-                local StrikingSpeedPad = GetSS()
-                
-                if StrikingSpeedPad and CheckFatigue() and not Eating then
-                    repeat task.wait() 
-                        fireclickdetector(StrikingSpeedPad.ClickDetector)
-                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
-                    until Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training") or not AutoStrikeSpeed
-                    local StrikeSpeedTraining = Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training")
-                    if StrikeSpeedTraining then
-                        StrikeSpeedTraining.Parent = Player.Character
-                        StrikeSpeedTraining:Activate()
-                        task.wait()
-                        StrikeSpeedTraining.Parent = Player.Backpack
-                    end
-                else
-                    task.wait(2.5)
-                end
-            end
-            task.wait()
-        end
-    end,
-    Enabled = false
-})
-
-
 local M2Toggle = Home.Toggle({
     Text = "Use M2",
     Callback = function(Value)
@@ -588,6 +533,73 @@ local MinStamSlider = Home.Slider({
 	Min = 0,
 	Max = 100,
 	Def = 5
+})
+
+local AutoSSToggle = Home.Toggle({
+    Text = "Auto StrikeSpeed",
+    Callback = function(Value)
+        AutoStrikeSpeed = Value
+
+        while AutoStrikeSpeed and CheckFatigue() do
+
+            if Player.PlayerGui:FindFirstChild("SpeedTraining") and CheckFatigue() and not Eating then
+                local Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
+                local Combat = GetCombat()
+
+                if ChargeRhythm then
+                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
+                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
+                end
+
+                if Player.PlayerGui:FindFirstChild("SpeedTraining") then
+                    if Player.PlayerGui.SpeedTraining.CanHit.Value then
+                        repeat task.wait()
+                        Combat.Parent = Player.Character
+                        Combat:Activate()
+                        if UseM2 then
+                            VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
+                            VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
+                        end
+                        task.wait(SSTiming)
+                    until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
+                    end
+                end
+            else
+                local StrikingSpeedPad = GetSS()
+                
+                if StrikingSpeedPad and CheckFatigue() and not Eating then
+                    repeat task.wait() 
+                        fireclickdetector(StrikingSpeedPad.ClickDetector)
+                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
+                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                    until Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training") or not AutoStrikeSpeed
+                    local StrikeSpeedTraining = Player.Character:FindFirstChild("Strike Speed Training") or Player.Backpack:FindFirstChild("Strike Speed Training")
+                    if StrikeSpeedTraining then
+                        StrikeSpeedTraining.Parent = Player.Character
+                        StrikeSpeedTraining:Activate()
+                        task.wait()
+                        StrikeSpeedTraining.Parent = Player.Backpack
+                    end
+                else
+                    task.wait(2.5)
+                end
+            end
+            task.wait()
+        end
+    end,
+    Enabled = false
+})
+
+local SSTimingSlider = Home.Slider({
+	Text = "SSTiming | 1",
+	Callback = function(Value)
+        local Value = Value/100
+        SSTimingSlider:SetText("SSTiming | "..Value)
+        SSTiming = Value
+	end,
+	Min = 0,
+	Max = 200
+	Def = 100
 })
 
 local function FireButton(btn)
