@@ -1337,17 +1337,22 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
     else
         for i,v in pairs(Players:GetChildren()) do
             if v:IsInGroup(groupID) then
-                local Rank = v:GetRankInGroup(groupID)
-                if Rank > 99 then
-                    AutoCook = false
-                    AutoStrikePower = false
-                    AutoStrikeSpeed = false
-                    AutoMachines = false
-                    AutoEat = false
-                    AutoDura = false
-                    SendWebhook(v .. " " .. v.PlayerId .. " has Joined you at " .. parseDateTime())
-                    PlaySound()
+                local Success, Result = pcall(function()
+                    return v:GetRankInGroup(groupID)
+                end)
+                if Success then
+                    if Result > 99 then
+                        AutoCook = false
+                        AutoStrikePower = false
+                        AutoStrikeSpeed = false
+                        AutoMachines = false
+                        AutoEat = false
+                        AutoDura = false
+                        SendWebhook(v .. " " .. v.PlayerId .. " has Joined you at " .. parseDateTime())
+                        PlaySound()
+                    end
                 end
+                task.wait(0.1)
             end
         end
     end
