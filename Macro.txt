@@ -9,7 +9,7 @@ local Mouse = Player:GetMouse()
 local AutoCook = false
 local AutoStrikePower = false
 local AutoStrikeSpeed = false
-local SSTiming = 1
+local SSTiming = 0.95
 local TargetBodyHeat = 30
 local MinStam = 5
 local MaxStam = 65
@@ -590,8 +590,9 @@ local AutoSSToggle = Home.Toggle({
     Enabled = false
 })
 
-local SSTimingSlider = Home.Slider({
-	Text = "SSTiming | 1",
+local SSTimingSlider
+SSTimingSlider = Home.Slider({
+	Text = "SSTiming | 0.95",
 	Callback = function(Value)
         local Value = Value/100
         SSTimingSlider:SetText("SSTiming | "..Value)
@@ -599,7 +600,7 @@ local SSTimingSlider = Home.Slider({
 	end,
 	Min = 0,
 	Max = 200,
-	Def = 100
+	Def = 95
 })
 
 local function FireButton(btn)
