@@ -598,7 +598,7 @@ local SSTimingSlider = Home.Slider({
         SSTiming = Value
 	end,
 	Min = 0,
-	Max = 200
+	Max = 200,
 	Def = 100
 })
 
