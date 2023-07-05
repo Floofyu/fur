@@ -348,6 +348,7 @@ local function CheckFatigue()
             repeat task.wait() until not Player.PlayerGui.MainGui.Utility.CombatTag.Visible
             Player:Kick("65 Fatigue Reached.")
         end
+        
         return false
     else
         return true
@@ -601,107 +602,112 @@ local AutoMachinesToggle = Machines.Toggle({
         AutoMachines = Value
 
         while AutoMachines and CheckFatigue() do
-            if not MachineType or not MachineLevel then return end
-
-            local Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
-
-
-            if MachineType == "Treadmill" then
-                if not TreadType then return end
-
-                if Player.PlayerGui:FindFirstChild("TreadmillMachineGUI") and CheckFatigue() and not Eating then
-
-                    CanEat = false
-
-                    if Player.PlayerGui.TreadmillMachineGUI.Frame.Visible then
-                        FireButton(Player.PlayerGui.TreadmillMachineGUI.Frame.StatPickF[TreadType])
-                        task.wait(.25)
-                    elseif Player.PlayerGui.TreadmillMachineGUI.Frame2.Visible then
-                        if Player.PlayerGui.TreadmillMachineGUI.Frame2.ListF:FindFirstChild(MachineLevel) then
-                            FireButton(Player.PlayerGui.TreadmillMachineGUI.Frame2.ListF[MachineLevel])
-                        end
-                        task.wait(.25)
-                    elseif Player.PlayerGui.TreadmillMachineGUI.Frame3.Visible then
-
-                        if Player.PlayerGui.TreadmillMachineGUI.Frame3.Start.Visible and Stamina >= MachineMaxStam then
-                            task.spawn(function()
-                                FireButton(Player.PlayerGui.TreadmillMachineGUI.Frame3.Start)
-                                task.wait(0.25)
-                            end)
-                        end
-
-                        if Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.Visible then
-                            if (Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.ButtonTemplate.Input.TextColor3 == Color3.fromRGB(255,255,255)) and Stamina >= MinStam then
-                                task.wait(Random.new():NextNumber(0.1, 0.2))
-                                VirtualInputManager:SendKeyEvent(true, Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.ButtonTemplate.Input.Text, false, game)
-                                VirtualInputManager:SendKeyEvent(false, Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.ButtonTemplate.Input.Text, false, game)
+            local Success, Error = pcall(function()
+                if not MachineType or not MachineLevel then return end
+    
+                local Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
+    
+    
+                if MachineType == "Treadmill" then
+                    if not TreadType then return end
+    
+                    if Player.PlayerGui:FindFirstChild("TreadmillMachineGUI") and CheckFatigue() and not Eating then
+    
+                        CanEat = false
+    
+                        if Player.PlayerGui.TreadmillMachineGUI.Frame.Visible then
+                            FireButton(Player.PlayerGui.TreadmillMachineGUI.Frame.StatPickF[TreadType])
+                            task.wait(.25)
+                        elseif Player.PlayerGui.TreadmillMachineGUI.Frame2.Visible then
+                            if Player.PlayerGui.TreadmillMachineGUI.Frame2.ListF:FindFirstChild(MachineLevel) then
+                                FireButton(Player.PlayerGui.TreadmillMachineGUI.Frame2.ListF[MachineLevel])
                             end
-                        end
-
-                        if Stamina <= MinStam then
-                            repeat wait() until Stamina >= MachineMaxStam or not AutoMachines or not Player.PlayerGui:FindFirstChild("TreadmillMachineGUI")
-                        end
-                    end
-                else
-                    CanEat = true
-                    task.wait(0.1)
-                    local Machine = GetMachine(MachineType)
-                    if Machine and not Eating then
-                        fireclickdetector(Machine.ClickDetector)
-                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
-                        task.wait(.25)
-                    else
-                        task.wait(2.5)
-                    end
-                end
-                
-            elseif MachineType == "BenchPress" or MachineType == "SquatMachine" then
-                
-                local MachineGui = Player.PlayerGui:FindFirstChild("BarbellMachineGUI") or Player.PlayerGui:FindFirstChild("SquatMachineGUI")
-
-                if MachineGui and CheckFatigue() and not Eating then
-                    if MachineGui.Frame.Visible then
-                        if MachineGui.Frame.ListF:FindFirstChild('Barbell '.. MachineLevel ..' Weight') then
-                            FireButton(MachineGui.Frame.ListF['Barbell '.. MachineLevel ..' Weight'])
-                        end
-                        task.wait(.25)
-                    elseif MachineGui.Frame2.Visible then
-                        if MachineGui.Frame2.Start.Visible and Stamina >= MachineMaxStam then
-                            task.spawn(function()
-                                FireButton(MachineGui.Frame2.Start)
-                                task.wait(.25)
-                            end)
-                        end
-
-                        if MachineGui.Frame2.LiftingF.Visible and Stamina >= MinStam then
-                            for i,v in pairs(MachineGui.Frame2.LiftingF:GetChildren()) do
-                                if v.Name == 'LiftIcon' then
-                                    task.wait(Random.new():NextNumber(0.1,0.2))
-                                    FireButton(v)
+                            task.wait(.25)
+                        elseif Player.PlayerGui.TreadmillMachineGUI.Frame3.Visible then
+    
+                            if Player.PlayerGui.TreadmillMachineGUI.Frame3.Start.Visible and Stamina >= MachineMaxStam then
+                                task.spawn(function()
+                                    FireButton(Player.PlayerGui.TreadmillMachineGUI.Frame3.Start)
+                                    task.wait(0.25)
+                                end)
+                            end
+    
+                            if Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.Visible then
+                                if (Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.ButtonTemplate.Input.TextColor3 == Color3.fromRGB(255,255,255)) and Stamina >= MinStam then
+                                    task.wait(Random.new():NextNumber(0.1, 0.2))
+                                    VirtualInputManager:SendKeyEvent(true, Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.ButtonTemplate.Input.Text, false, game)
+                                    VirtualInputManager:SendKeyEvent(false, Player.PlayerGui.TreadmillMachineGUI.Frame3.TrainingF.ButtonTemplate.Input.Text, false, game)
                                 end
                             end
+    
+                            if Stamina <= MinStam then
+                                repeat wait() until Stamina >= MachineMaxStam or not AutoMachines or not Player.PlayerGui:FindFirstChild("TreadmillMachineGUI")
+                            end
                         end
-
-                        if Stamina <= MinStam then
-                            repeat wait() until Stamina >= MachineMaxStam or not AutoMachines or not MachineGui
+                    else
+                        CanEat = true
+                        task.wait(0.1)
+                        local Machine = GetMachine(MachineType)
+                        if Machine and not Eating then
+                            fireclickdetector(Machine.ClickDetector)
+                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
+                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                            task.wait(.25)
+                        else
+                            task.wait(2.5)
                         end
                     end
-                else
-                    CanEat = true
-                    task.wait(0.1)
-                    local Machine = GetMachine(MachineType)
-                    if Machine and not Eating then
-                        fireclickdetector(Machine.ClickDetector)
-                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                        VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
-                        task.wait(.25)
+                    
+                elseif MachineType == "BenchPress" or MachineType == "SquatMachine" then
+                    
+                    local MachineGui = Player.PlayerGui:FindFirstChild("BarbellMachineGUI") or Player.PlayerGui:FindFirstChild("SquatMachineGUI")
+    
+                    if MachineGui and CheckFatigue() and not Eating then
+                        if MachineGui.Frame.Visible then
+                            if MachineGui.Frame.ListF:FindFirstChild('Barbell '.. MachineLevel ..' Weight') then
+                                FireButton(MachineGui.Frame.ListF['Barbell '.. MachineLevel ..' Weight'])
+                            end
+                            task.wait(.25)
+                        elseif MachineGui.Frame2.Visible then
+                            if MachineGui.Frame2.Start.Visible and Stamina >= MachineMaxStam then
+                                task.spawn(function()
+                                    FireButton(MachineGui.Frame2.Start)
+                                    task.wait(.25)
+                                end)
+                            end
+    
+                            if MachineGui.Frame2.LiftingF.Visible and Stamina >= MinStam then
+                                for i,v in pairs(MachineGui.Frame2.LiftingF:GetChildren()) do
+                                    if v.Name == 'LiftIcon' then
+                                        task.wait(Random.new():NextNumber(0.1,0.2))
+                                        FireButton(v)
+                                    end
+                                end
+                            end
+    
+                            if Stamina <= MinStam then
+                                repeat wait() until Stamina >= MachineMaxStam or not AutoMachines or not MachineGui
+                            end
+                        end
                     else
-                        task.wait(2.5)
+                        CanEat = true
+                        task.wait(0.1)
+                        local Machine = GetMachine(MachineType)
+                        if Machine and not Eating then
+                            fireclickdetector(Machine.ClickDetector)
+                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
+                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                            task.wait(.25)
+                        else
+                            task.wait(2.5)
+                        end
                     end
                 end
+                task.wait(.1)
+            end)
+            if Error then
+                print(Error)
             end
-            task.wait(.1)
         end
     end,
     Enabled = false
