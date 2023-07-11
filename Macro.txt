@@ -350,7 +350,7 @@ local function CheckFatigue()
 
         if Kick then
             repeat task.wait() until not Player.PlayerGui.MainGui.Utility.CombatTag.Visible
-            Player:Kick("65 Fatigue Reached.")
+            Player:Kick("65 Fatigue Reached Or No Hunger")
         end
         
         return false
