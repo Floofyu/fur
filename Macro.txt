@@ -1,5 +1,4 @@
 -- Made By vib_y
-
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 
 local Players = game:GetService("Players")
@@ -1344,6 +1343,7 @@ local groupID = 4800422
 
 local Admins = {
 	3303198506,
+    318263297,
 }
 local Prefix = "/e"
 
@@ -1363,7 +1363,7 @@ end
 
 local function IsAdmin(Player)
 	for _,Admin in pairs (Admins) do
-		print(Admin,Player)
+		--print(Admin,Player)
 		if type(Admin) == "string" and string.lower(Admin) == string.lower(Player.Name) then
 			return true
 		elseif type(Admin) == "number" and Admin == Player.UserId then
@@ -1398,6 +1398,14 @@ local function ParseMessage(Player,Message)
 			CommandFunc(Player,Arguments)
 		end
 	end
+end
+
+for i,v in pairs(Players:GetChildren()) do
+    v.Chatted:Connect(function(Message,Recipient)
+		if not Recipient and IsAdmin(Player) then
+			ParseMessage(Player,Message)
+		end
+	end)
 end
 
 local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
