@@ -1343,9 +1343,11 @@ local Group = game:GetService("GroupService")
 local groupID = 4800422
 
 local Admins = {
-	3303198506,
+    3303198506,
     318263297,
+    4178031441,
 }
+
 local Prefix = "/e"
 
 local Commands = {}
