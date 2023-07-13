@@ -496,10 +496,7 @@ local AutoSPToggle = Home.Toggle({
                     task.wait()
                 until BodyHeat <= TargetBodyHeat or Stamina <= MinStam or not AutoStrikePower or Eating or not CheckFatigue()
 
-                if ChargeRhythm then
-                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
-                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
-                end
+                Combat.Parent = Player.Backpack
             end
             task.wait()
         end
