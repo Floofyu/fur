@@ -424,7 +424,7 @@ end
 
 
 local Library = Material.Load({
-    Title = "Mo Demon",
+    Title = "Mighty Omega | v.1.0.0",
     Style = 3,
     SizeX = 250,
     SizeY = 270,
