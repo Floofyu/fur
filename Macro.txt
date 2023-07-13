@@ -190,11 +190,13 @@ local function GetNearPlayers()
 
     for i,v in pairs(Players:GetChildren()) do
         if v.Name ~= Player.Name then
-            local Distance = (v.Character.HumanoidRootPart.Position - Player.Character.HumanoidRootPart.Position).magnitude
-
-            if Distance <= 15 then
-                table.insert(PlayersT, v)
-            end
+            pcall(function()
+                local Distance = (v.Character.HumanoidRootPart.Position - Player.Character.HumanoidRootPart.Position).magnitude
+    
+                if Distance <= 15 then
+                    table.insert(PlayersT, v)
+                end
+            end)
         end
     end
 
