@@ -1352,18 +1352,6 @@ local Prefix = "/e"
 
 local Commands = {}
 
-Commands.kick = function(Sender, Arguments)
-    local Username = Arguments[1]
-    table.remove(Arguments, 1)
-    local Message = table.concat(Arguments, " ")
-
-    if Username == string.lower(Player.Name) then
-        Player:Kick(Message)
-
-        SendWebhook(' You were kicked at '.. parseDateTime().. ' By: '.. Sender.Name.. ' For: ' .. Message)
-    end
-end
-
 local function IsAdmin(Player)
 	for _,Admin in pairs (Admins) do
 		--print(Admin,Player)
@@ -1379,6 +1367,26 @@ local function IsAdmin(Player)
 		end
 	end
 	return false
+end
+
+Commands.kick = function(Sender, Arguments)
+    if IsAdmin(Sender) then
+        local Username = Arguments[1]
+        table.remove(Arguments, 1)
+        local Message = table.concat(Arguments, " ")
+    
+        if Username == string.lower(Player.Name) then
+            Player:Kick(Message)
+    
+            SendWebhook(' You were kicked at '.. parseDateTime().. ' By: '.. Sender.Name.. ' For: ' .. Message)
+        end
+    end
+end
+
+Commands.toggle = function(Sender, Arguments)
+    if string.lower(Sender.Name) == string.lower(Player.Name) then
+        getgenv().OldInstance.MainFrame.Visible = not getgenv().OldInstance.MainFrame.Visible
+    end
 end
 
 local function ParseMessage(Player,Message)
@@ -1405,7 +1413,7 @@ end
 
 for i,v in pairs(Players:GetChildren()) do
     v.Chatted:Connect(function(Message,Recipient)
-		if not Recipient and IsAdmin(v) then
+		if not Recipient --[[and IsAdmin(v)]] then
 			ParseMessage(v,Message)
 		end
 	end)
@@ -1415,7 +1423,7 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
     local PlayerID = Player.UserId
 
     Player.Chatted:Connect(function(Message,Recipient)
-		if not Recipient and IsAdmin(Player) then
+		if not Recipient --[[and IsAdmin(Player)]] then
 			ParseMessage(Player,Message)
 		end
 	end)
