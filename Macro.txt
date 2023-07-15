@@ -554,6 +554,8 @@ local AutoSSToggle = Home.Toggle({
                 local Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
                 local Combat = GetCombat()
 
+                Combat.Parent = Player.Character
+
                 if ChargeRhythm then
                     VirtualInputManager:SendKeyEvent(true, "R", false, game)
                     VirtualInputManager:SendKeyEvent(false, "R", false, game)
@@ -573,10 +575,8 @@ local AutoSSToggle = Home.Toggle({
                     end
                 end
 
-                if ChargeRhythm then
-                    VirtualInputManager:SendKeyEvent(true, "R", false, game)
-                    VirtualInputManager:SendKeyEvent(false, "R", false, game)
-                end
+                Combat.Parent = Player.Backpack
+                Combat.Parent = Player.Character
             else
                 local StrikingSpeedPad = GetSS()
                 
