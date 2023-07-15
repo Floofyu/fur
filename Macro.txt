@@ -497,6 +497,7 @@ local AutoSPToggle = Home.Toggle({
                 until BodyHeat <= TargetBodyHeat or Stamina <= MinStam or not AutoStrikePower or Eating or not CheckFatigue()
 
                 Combat.Parent = Player.Backpack
+		Combat.Parent = Player.Character
             end
             task.wait()
         end
