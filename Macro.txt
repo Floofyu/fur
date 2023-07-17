@@ -1443,7 +1443,7 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                     AutoMachines = false
                     AutoEat = false
                     AutoDura = false
-                    SendWebhook(Player .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. parseDateTime())
+                    SendWebhook(Player.Name .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. parseDateTime())
                     PlaySound()
                 end
             end
@@ -1462,7 +1462,7 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                         AutoMachines = false
                         AutoEat = false
                         AutoDura = false
-                        SendWebhook(v .. " " .. v.PlayerId .. " has Joined you at " .. parseDateTime())
+                        SendWebhook(v.Name .. " " .. v.PlayerId .. " has Joined you at " .. parseDateTime())
                         PlaySound()
                     end
                 end
