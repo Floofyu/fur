@@ -1434,8 +1434,6 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
     if Success then
         for _, value in pairs(Result) do
             if value["Id"] == groupID then
-                print(value["Role"]) -- prints the Role of the player
-                print(value["Rank"]) -- prints the Rank of the player
                 if value["Role"] == "Mod" or value["Role"] == "Associates." or value["Role"] == "Owner" then
                     AutoCook = false
                     AutoStrikePower = false
@@ -1443,6 +1441,9 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                     AutoMachines = false
                     AutoEat = false
                     AutoDura = false
+                    print(value["Role"]) -- prints the Role of the player
+                    print(value["Rank"]) -- prints the Rank of the player
+                    print(Player.Name)
                     SendWebhook(Player.Name .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. parseDateTime())
                     PlaySound()
                 end
