@@ -576,7 +576,6 @@ local AutoSSToggle = Home.Toggle({
                 end
 
                 Combat.Parent = Player.Backpack
-                Combat.Parent = Player.Character
             else
                 local StrikingSpeedPad = GetSS()
                 
