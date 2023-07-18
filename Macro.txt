@@ -151,14 +151,6 @@ local function format(num, digits)
 	return string.format("%0" .. digits .. "i", num)
 end
 
-local function parseDateTime()
-	local osDate = os.date("!*t")
-	local year, mon, day = osDate["year"], osDate["month"], osDate["day"]
-	local hour, min, sec = osDate["hour"], osDate["min"], osDate["sec"]
-	return 'Date: '.. year .. "-" .. format(mon, 2) .. "-" .. format(day, 2) .. " Time: " .. format(hour, 2) .. ":" .. format(min, 2) .. ":" .. format(sec, 2) .. ""
-end
-
-
 function SendWebhook(Message)
     if not shared.Webhook then return false end
     if shared.DiscordID then Ping = true else Ping = false end
@@ -171,6 +163,8 @@ function SendWebhook(Message)
     local Data = {Url = shared.Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {['content-type'] = 'application/json'}}
     request(Data)
 end
+
+SendWebhook(' TESTING WEBHOOK! :3 You joined at '.. os.date().. " JobId: " .. game.JobId)
 
 local function GetStove(Blacklist)
     for i,v in pairs(workspace:GetDescendants()) do
@@ -348,7 +342,7 @@ local function CheckFatigue()
     local Hunger = Player.PlayerGui.MainGui.Utility.StomachBar.BarF.Bar.Size.X.Scale * 100
     if tonumber(Fatigue) >= 6500 or Hunger < 17.5 then
         PlaySound()
-        SendWebhook(" You Reached Max Fatigue [65%] at " .. parseDateTime())
+        SendWebhook(" You Reached Max Fatigue [65%] at " .. os.date())
 
         if Kick then
             repeat task.wait() until not Player.PlayerGui.MainGui.Utility.CombatTag.Visible
@@ -876,10 +870,10 @@ local AutoEatToggle = Food.Toggle({
                 Eating = true
 
                 if not GetFood() then
-                    SendWebhook(" Ran Out Of Food At " .. parseDateTime())
+                    SendWebhook(" Ran Out Of Food At " .. os.date())
                     PlaySound()
                     if Kick then
-                        Player:Kick("Ran Out Of Food At " .. parseDateTime())
+                        Player:Kick("Ran Out Of Food At " .. os.date())
                     end
                     AutoEat = false
                 end
@@ -1124,7 +1118,7 @@ local Trigger = Misc.Toggle({
                     if Player.PlayerGui.MainGui.Utility.CombatTag.Visible == true and not CombatDebouce and not AutoDura then
                         CombatDebouce = true
                         local NearPlayers = GetNearPlayers()
-                        SendWebhook(" You were put in combat at " .. parseDateTime())
+                        SendWebhook(" You were put in combat at " .. os.date())
                         PlaySound()
 
                         for i,v in pairs(NearPlayers) do
@@ -1143,10 +1137,10 @@ local Trigger = Misc.Toggle({
             task.spawn(function()
                 local EventGrip = Player.Character.Humanoid.Died:Connect(function()
                     PlaySound()
-                    SendWebhook(' You were gripped at '.. parseDateTime().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
+                    SendWebhook(' You were gripped at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     if Kick then
                         task.wait(5)
-                        Player:Kick('You were gripped at '.. parseDateTime().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
+                        Player:Kick('You were gripped at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     end
                 end)
                 table.insert(Triggers, EventGrip)
@@ -1157,7 +1151,7 @@ local Trigger = Misc.Toggle({
                     if Part.Name == "Mounted" then
                         Mounter = Player.Character.Mounted.Value
                         PlaySound() 
-                        SendWebhook(' You were mounted at '.. parseDateTime().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
+                        SendWebhook(' You were mounted at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     end
                 end)
                 table.insert(Triggers, EventMount)
@@ -1374,7 +1368,7 @@ Commands.kick = function(Sender, Arguments)
         if Username == string.lower(Player.Name) then
             Player:Kick(Message)
     
-            SendWebhook(' You were kicked at '.. parseDateTime().. ' By: '.. Sender.Name.. ' For: ' .. Message)
+            SendWebhook(' You were kicked at '.. os.date().. ' By: '.. Sender.Name.. ' For: ' .. Message)
         end
     end
 end
@@ -1441,7 +1435,7 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                     print(value["Role"]) -- prints the Role of the player
                     print(value["Rank"]) -- prints the Rank of the player
                     print(Player.Name)
-                    SendWebhook(Player.Name .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. parseDateTime())
+                    SendWebhook(Player.Name .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. os.date())
                     PlaySound()
                 end
             end
@@ -1460,7 +1454,7 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                         AutoMachines = false
                         AutoEat = false
                         AutoDura = false
-                        SendWebhook(v.Name .. " " .. v.PlayerId .. " has Joined you at " .. parseDateTime())
+                        SendWebhook(v.Name .. " " .. v.PlayerId .. " has Joined you at " .. os.date())
                         PlaySound()
                     end
                 end
