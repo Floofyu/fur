@@ -1139,7 +1139,7 @@ local Trigger = Misc.Toggle({
                     PlaySound()
                     SendWebhook(' You were gripped at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     if Kick then
-                        task.wait(5)
+                        task.wait(10)
                         Player:Kick('You were gripped at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     end
                 end)
