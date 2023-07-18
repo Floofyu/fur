@@ -1137,10 +1137,9 @@ local Trigger = Misc.Toggle({
                         end)
                     end
                 end)
+                table.insert(Triggers, EventCombat)
             end)
-    
-            table.insert(Triggers, EventCombat)
-    
+
             task.spawn(function()
                 local EventGrip = Player.Character.Humanoid.Died:Connect(function()
                     PlaySound()
@@ -1150,9 +1149,8 @@ local Trigger = Misc.Toggle({
                         Player:Kick('You were gripped at '.. parseDateTime().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     end
                 end)
+                table.insert(Triggers, EventGrip)
             end)
-    
-            table.insert(Triggers, EventGrip)
 
             task.spawn(function()
                 local EventMount = Player.Character.DescendantAdded:Connect(function(Part)
@@ -1162,15 +1160,12 @@ local Trigger = Misc.Toggle({
                         SendWebhook(' You were mounted at '.. parseDateTime().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     end
                 end)
+                table.insert(Triggers, EventMount)
             end)
-
-            table.insert(Triggers, EventMount)
         else
             for i, v in pairs(Triggers) do
-			print(i,v)
 		        v:Disconnect()
 		        Triggers[i] = nil
-		
 	        end
         end
     end,
