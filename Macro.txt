@@ -1167,8 +1167,10 @@ local Trigger = Misc.Toggle({
             table.insert(Triggers, EventMount)
         else
             for i, v in pairs(Triggers) do
+			print(i,v)
 		        v:Disconnect()
-		        Connections[i] = nil
+		        Triggers[i] = nil
+		
 	        end
         end
     end,
