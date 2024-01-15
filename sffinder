@@ -2,7 +2,6 @@ local Whitelist = {
 	"Akuma",
 	"Cody",
 	"Ryu",
-	"Yang",
 }
 
 local Found = false
