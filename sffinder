@@ -91,6 +91,8 @@ for i,v in pairs(Workspace:GetDescendants()) do
 			if table.find(Whitelist, Name) then
 				print(Name)
 				Found = true
+			else
+				print(Name)
 			end
 		end
 	end
