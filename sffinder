@@ -90,10 +90,7 @@ for i,v in pairs(Workspace:GetDescendants()) do
 			local Name = Npc.Attached.FakeH:FindFirstChildWhichIsA("Model").Name
 			if table.find(Whitelist, Name) then
 				print(Name)
-				WebhookFound(Name)
 				Found = true
-			else
-				Webhook(Name)
 			end
 		end
 	end
