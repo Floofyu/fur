@@ -1,0 +1,143 @@
+local Whitelist = {
+	"Akuma",
+	"Cody",
+	"Ryu",
+}
+
+local Found = false
+local UserId = 1556293964 -- Put ur userid your rejoining on
+local WebhookHideName = true -- Puts your user and userid as Private
+
+repeat task.wait() until game:IsLoaded()
+local Check, Error = pcall(function()
+local Player = game:GetService("Players").LocalPlayer
+if UserId == Player.UserId then 
+local PlaceID = game.PlaceId
+local AllIDs = {}
+local foundAnything = ""
+local actualHour = os.date("!*t").hour
+local Deleted = false
+local File = pcall(function()
+    AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+end)
+if not File then
+    table.insert(AllIDs, actualHour)
+    writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+end
+function TPReturner()
+    local Site;
+    if foundAnything == "" then
+        Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+    else
+        Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+    end
+    local ID = ""
+    if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+        foundAnything = Site.nextPageCursor
+    end
+    local num = 0;
+    for i,v in pairs(Site.data) do
+        local Possible = true
+        ID = tostring(v.id)
+        if tonumber(v.maxPlayers) > tonumber(v.playing) then
+            for _,Existing in pairs(AllIDs) do
+                if num ~= 0 then
+                    if ID == tostring(Existing) then
+                        Possible = false
+                    end
+                else
+                    if tonumber(actualHour) ~= tonumber(Existing) then
+                        local delFile = pcall(function()
+                            delfile("NotSameServers.json")
+                            AllIDs = {}
+                            table.insert(AllIDs, actualHour)
+                        end)
+                    end
+                end
+                num = num + 1
+            end
+            if Possible == true then
+                table.insert(AllIDs, ID)
+                wait()
+                pcall(function()
+                    writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                    wait()
+                    game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                end)
+                wait(4)
+            end
+        end
+    end
+end
+
+function Teleport()
+    while wait() do
+        pcall(function()
+            TPReturner()
+            if foundAnything ~= "" then
+                TPReturner()
+            end
+        end)
+    end
+end
+
+for i,v in pairs(Workspace:GetDescendants()) do
+	if v.Name == "NPCModel" then
+		-- print(v.Value)
+		local Folder = v.Parent
+		local Npc = Folder:FindFirstChildWhichIsA("Model")
+		if Npc:FindFirstChild("Attached") then
+			local Name = Npc.Attached.FakeH:FindFirstChildWhichIsA("Model").Name
+			if table.find(Whitelist, Name) then
+				print(Name)
+				WebhookFound(Name)
+				Found = true
+			else
+				Webhook(Name)
+			end
+		end
+	end
+end
+
+for i,v in pairs(Workspace:GetDescendants()) do
+    if v.Name == "NPCModel" then
+        -- print(v.Value)
+        local Folder = v.Parent
+        local Npc = Folder:FindFirstChildWhichIsA("Model")
+        if Npc:FindFirstChild("Attached") then
+            local Name = Npc.Attached.FakeH:FindFirstChildWhichIsA("Model").Name
+            if not Npc.Attached.FakeH:FindFirstChild("kjasdjklj23kj4kljl") then
+            local a = Instance.new("BillboardGui",Npc.Attached.FakeH)
+               a.Name = "kjasdjklj23kj4kljl"
+               a.Size = UDim2.new(10,0, 10,0)
+               a.AlwaysOnTop = true
+               local b = Instance.new("Frame",a)
+              b.Size = UDim2.new(1,0, 1,0)
+               b.BackgroundTransparency = 0.80
+               b.BorderSizePixel = 0
+               b.BackgroundColor3 = Color3.new(0, 0, 0)
+               local c = Instance.new('TextLabel',b)
+               c.Size = UDim2.new(2,0,2,0)
+               c.BorderSizePixel = 0
+               c.TextSize = 20
+               c.Text = Name
+        c.TextColor3 = Color3.new(255, 255, 255)
+               c.BackgroundTransparency = 1
+            else
+            Npc.Attached.FakeH.kjasdjklj23kj4kljl:Destroy()
+            end
+        end
+    end
+end
+
+task.wait(5)
+
+if Found == false then
+	Teleport()
+end
+end
+end)
+if Check then
+else
+print(Error)
+end
