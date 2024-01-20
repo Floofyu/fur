@@ -1172,11 +1172,6 @@ local AutoEXP = Misc.Toggle({
             while AutoSkillXP do
                 for i,v in pairs(workspace.Live:GetChildren()) do 
                     if v.Name == "Dummy" and #Players:GetPlayers() == 1 then
-                        for i, Part in pairs(v:GetChildren()) do
-                            if Part:IsA("MeshPart") or Part:IsA("Part") then
-                                Part.CanCollide = false
-                            end
-                        end
                         pcall(function()
                             v.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-4)
                             v.HumanoidRootPart.AssemblyAngularVelocity = Vector3.new(17.325,17.325,17.325)
