@@ -1178,7 +1178,7 @@ local AutoEXP = Misc.Toggle({
                             end
                         end
                         pcall(function()
-                            v.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-math.random(4, 5))
+                            v.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-4.5)
                             v.HumanoidRootPart.AssemblyAngularVelocity = Vector3.new(17.325,17.325,17.325)
                             v.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(17.325,17.325,17.325)
                         end)
