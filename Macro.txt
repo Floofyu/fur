@@ -322,9 +322,9 @@ end
 
 local function StartRun()
     if not CheckIfRunning() then
+    VirtualInputManager:SendKeyEvent(true, "S", false, game)
     VirtualInputManager:SendKeyEvent(true, "W", false, game)
     VirtualInputManager:SendKeyEvent(false, "W", false, game)
-    VirtualInputManager:SendKeyEvent(true, "S", false, game)
     VirtualInputManager:SendKeyEvent(true, "W", false, game)
     end
 end
