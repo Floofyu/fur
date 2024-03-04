@@ -1,3 +1,7 @@
+
+shared.DiscordID = "546578539353341952"
+shared.Webhook = "https://discord.com/api/webhooks/1210416143190327316/s9PTAjuFwD5-ezMIkoxEgW97Sg5r_OASORmNJUazDswtYlx9mJ7aDzH6cC72DEWxn331"
+
 -- Made by vib_y uwu
 
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
@@ -612,10 +616,21 @@ SSTimingSlider = Home.Slider({
 	Def = 95
 })
 
-local function FireButton(btn)
-	for i,v in pairs(getconnections(btn.MouseButton1Click)) do
+local function FireButton(button)
+    local size = button.AbsoluteSize;
+    local pos = button.AbsolutePosition;
+    local inset = guiService:GetGuiInset();
+    local center = {
+        x = (pos.X+inset.X)+(size.X/2);
+        y = (pos.Y+inset.Y)+(size.Y/2);
+    }
+    VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,true,game,0);
+    task.wait(0.1);
+    VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,false,game,0);
+
+	--[[for i,v in pairs(getconnections(btn.MouseButton1Click)) do
 		v.Function()
-	end
+	end]]
 end
 
 local AutoMachinesToggle = Machines.Toggle({
