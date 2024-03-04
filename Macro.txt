@@ -349,6 +349,8 @@ local function CheckFatigue()
             repeat task.wait() until not Player.PlayerGui.MainGui.Utility.CombatTag.Visible
             Player:Kick("65 Fatigue Reached Or No Hunger")
         end
+
+        repeat Fatigue, Numbers = string.gsub(Player.PlayerGui.MainGui.Utility.BodyFatigue.Text, "%D", "") task.wait(.5) until tonumber(Fatigue) <= 0
         
         return false
     else
@@ -361,7 +363,7 @@ local function GetDura()
         if string.match(v.Name, 'Durability Training') and v:FindFirstChild('ClickDetector') then
             local Distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
-            if Distance <= 15 then  
+            if Distance <= v.ClickDetector.MaxActivationDistance then  
                 return v
             end
         end
@@ -374,7 +376,7 @@ local function GetSS()
         if string.match(v.Name, 'Strike Speed Training') and v:FindFirstChild('ClickDetector') then
             local Distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
-            if Distance <= 15 then  
+            if Distance <= v.ClickDetector.MaxActivationDistance then  
                 return v
             end
         end
@@ -621,6 +623,10 @@ local AutoMachinesToggle = Machines.Toggle({
     Callback = function(Value)
         AutoMachines = Value
 
+        if Value == false then
+            CanEat = true
+        end
+
         while AutoMachines and CheckFatigue() do
             local Success, Error = pcall(function()
                 if not MachineType or not MachineLevel then return end
@@ -734,6 +740,7 @@ local AutoMachinesToggle = Machines.Toggle({
             if Error then
                 print(Error)
             end
+            task.wait()
         end
     end,
     Enabled = false
@@ -926,7 +933,7 @@ local DuraToggle = Dura.Toggle({
     Callback = function(Value)
         AutoDura = Value
 
-        while AutoDura do
+        while AutoDura and CheckFatigue() do
             task.wait(.5)
 
             if DuraFirst == nil then return end
@@ -1330,6 +1337,7 @@ end)
 
 table.insert(Events, PlayerListRemoved)
 
+
 local Group = game:GetService("GroupService")
 local groupID = 4800422
 
@@ -1427,12 +1435,6 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
         for _, value in pairs(Result) do
             if value["Id"] == groupID then
                 if value["Role"] == "Mod" or value["Role"] == "Associates." or value["Role"] == "Owner" then
-                    AutoCook = false
-                    AutoStrikePower = false
-                    AutoStrikeSpeed = false
-                    AutoMachines = false
-                    AutoEat = false
-                    AutoDura = false
                     print(value["Role"]) -- prints the Role of the player
                     print(value["Rank"]) -- prints the Rank of the player
                     print(Player.Name)
@@ -1449,12 +1451,6 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                 end)
                 if Success then
                     if Result > 99 then
-                        AutoCook = false
-                        AutoStrikePower = false
-                        AutoStrikeSpeed = false
-                        AutoMachines = false
-                        AutoEat = false
-                        AutoDura = false
                         SendWebhook(v.Name .. " " .. v.PlayerId .. " has Joined you at " .. os.date())
                         PlaySound()
                     end
