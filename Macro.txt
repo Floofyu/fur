@@ -385,7 +385,7 @@ end
 
 local function GetMachine(Type)
 	if Type == 'Treadmill' then
-		for i,v in pairs(game.Workspace:GetDescendants()) do
+		for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == 'Machine' and v:FindFirstChild('ClickDetector') and v:FindFirstChild('Steel') then
 				local Distance = (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
@@ -395,7 +395,7 @@ local function GetMachine(Type)
 			end
 		end
     elseif Type == 'BenchPress' then
-        for i,v in pairs(game.Workspace:GetDescendants()) do
+        for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == 'Machine' and v:FindFirstChild('ClickDetector') and v:FindFirstChild('MeshPart') then
 				local Distance = (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
@@ -405,7 +405,7 @@ local function GetMachine(Type)
 			end
 		end
     elseif Type == 'SquatMachine' then
-        for i,v in pairs(game.Workspace:GetDescendants()) do
+        for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == 'Machine' and v:FindFirstChild('ClickDetector') and not v:FindFirstChild('MeshPart') and not v:FindFirstChild('Steel') then
 				local Distance = (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
@@ -629,6 +629,22 @@ local function FireButton(button)
 	end]]
 end
 
+local function safeClick(part)
+    if (Player.Character.HumanoidRootPart.Position - part.Position).Magnitude <= 10 then
+        local posOnC = workspace.Camera:WorldToScreenPoint(part.Position);
+        local inset = GuiService:GetGuiInset();
+        local center = {
+            x = (posOnC.X+inset.X)+(part.Size.X/2);
+            y = (posOnC.Y+inset.Y)+(part.Size.Y/2);
+        }
+        VirtualInputManager:SendMouseMoveEvent(center.x,center.y,game);
+        task.wait(0.1);
+        VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,true,game,0);
+        task.wait(0.1);
+        VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,false,game,0);
+    end
+end
+
 local AutoMachinesToggle = Machines.Toggle({
     Text = "Auto Machines",
     Callback = function(Value)
@@ -690,8 +706,7 @@ local AutoMachinesToggle = Machines.Toggle({
                         local Machine = GetMachine(MachineType)
                         if Machine and not Eating then
                             fireclickdetector(Machine.ClickDetector)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                            safeClick(Machine)
                             task.wait(.25)
                         else
                             task.wait(2.5)
@@ -738,8 +753,7 @@ local AutoMachinesToggle = Machines.Toggle({
                         local Machine = GetMachine(MachineType)
                         if Machine and not Eating then
                             fireclickdetector(Machine.ClickDetector)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                            safeClick(Machine)
                             task.wait(.25)
                         else
                             task.wait(2.5)
