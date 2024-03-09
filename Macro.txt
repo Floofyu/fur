@@ -630,7 +630,7 @@ local function FireButton(button)
 end
 
 local function safeClick(part)
-    if (Player.Character.HumanoidRootPart.Position - part.Position).Magnitude <= 10 then
+    if (Player.Character.HumanoidRootPart.Position - part.WorldPivot.Position).Magnitude <= 10 then
         local posOnC = workspace.Camera:WorldToScreenPoint(part.Position);
         local inset = GuiService:GetGuiInset();
         local center = {
