@@ -151,6 +151,21 @@ local function format(num, digits)
 	return string.format("%0" .. digits .. "i", num)
 end
 
+function SendWebhook(Message)
+    if not shared.Webhook then return false end
+    if shared.DiscordID then Ping = true else Ping = false end
+
+    local data = {
+        ["content"] = (Ping and'<@'.. shared.DiscordID..'> ' or 'Anon') .. Message,
+    }
+ 
+    request = http_request or request or HttpPost or syn.request
+    local Data = {Url = shared.Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {['content-type'] = 'application/json'}}
+    request(Data)
+end
+
+SendWebhook(' TESTING WEBHOOK! :3 You joined at '.. os.date().. " JobId: " .. game.JobId)
+
 local function GetStove(Blacklist)
     for i,v in pairs(workspace:GetDescendants()) do
         if v:IsA("Model") and v.Name == "PanModel" then
@@ -296,7 +311,7 @@ end
 
 local function CheckIfRunning()
     for i,v in pairs(Player.Character.Humanoid.Animator:GetPlayingAnimationTracks()) do
-        if v.Animation.AnimationId == "rbxassetid://4889489948" then
+        if v.Animation.AnimationId == "rbxassetid://16715338319" then
             if v.IsPlaying == true then
                 return true
             end
@@ -307,10 +322,11 @@ end
 
 local function StartRun()
     if not CheckIfRunning() then
-    VirtualInputManager:SendKeyEvent(true, "W", false, game)
-    VirtualInputManager:SendKeyEvent(false, "W", false, game)
-    VirtualInputManager:SendKeyEvent(true, "S", false, game)
-    VirtualInputManager:SendKeyEvent(true, "W", false, game)
+        VirtualInputManager:SendKeyEvent(true, "S", false, game)
+        VirtualInputManager:SendKeyEvent(true, "W", false, game)
+        task.wait(.1)
+        VirtualInputManager:SendKeyEvent(false, "W", false, game)
+        VirtualInputManager:SendKeyEvent(true, "W", false, game)
     end
 end
 
@@ -327,11 +343,14 @@ local function CheckFatigue()
     local Hunger = Player.PlayerGui.MainGui.Utility.StomachBar.BarF.Bar.Size.X.Scale * 100
     if tonumber(Fatigue) >= 6500 or Hunger < 17.5 then
         PlaySound()
+        SendWebhook(" You Reached Max Fatigue [65%] at " .. os.date())
 
         if Kick then
             repeat task.wait() until not Player.PlayerGui.MainGui.Utility.CombatTag.Visible
             Player:Kick("65 Fatigue Reached Or No Hunger")
         end
+
+        repeat Fatigue, Numbers = string.gsub(Player.PlayerGui.MainGui.Utility.BodyFatigue.Text, "%D", "") task.wait(.5) until tonumber(Fatigue) <= 0
         
         return false
     else
@@ -344,7 +363,7 @@ local function GetDura()
         if string.match(v.Name, 'Durability Training') and v:FindFirstChild('ClickDetector') then
             local Distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
-            if Distance <= 15 then  
+            if Distance <= v.ClickDetector.MaxActivationDistance then  
                 return v
             end
         end
@@ -357,7 +376,7 @@ local function GetSS()
         if string.match(v.Name, 'Strike Speed Training') and v:FindFirstChild('ClickDetector') then
             local Distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
-            if Distance <= 15 then  
+            if Distance <= v.ClickDetector.MaxActivationDistance then  
                 return v
             end
         end
@@ -366,7 +385,7 @@ end
 
 local function GetMachine(Type)
 	if Type == 'Treadmill' then
-		for i,v in pairs(game.Workspace:GetDescendants()) do
+		for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == 'Machine' and v:FindFirstChild('ClickDetector') and v:FindFirstChild('Steel') then
 				local Distance = (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
@@ -376,7 +395,7 @@ local function GetMachine(Type)
 			end
 		end
     elseif Type == 'BenchPress' then
-        for i,v in pairs(game.Workspace:GetDescendants()) do
+        for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == 'Machine' and v:FindFirstChild('ClickDetector') and v:FindFirstChild('MeshPart') then
 				local Distance = (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
@@ -386,7 +405,7 @@ local function GetMachine(Type)
 			end
 		end
     elseif Type == 'SquatMachine' then
-        for i,v in pairs(game.Workspace:GetDescendants()) do
+        for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == 'Machine' and v:FindFirstChild('ClickDetector') and not v:FindFirstChild('MeshPart') and not v:FindFirstChild('Steel') then
 				local Distance = (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude
 
@@ -593,16 +612,47 @@ SSTimingSlider = Home.Slider({
 	Def = 95
 })
 
-local function FireButton(btn)
-	for i,v in pairs(getconnections(btn.MouseButton1Click)) do
+local function FireButton(button)
+    local size = button.AbsoluteSize;
+    local pos = button.AbsolutePosition;
+    local inset = game:GetService("GuiService"):GetGuiInset();
+    local center = {
+        x = (pos.X+inset.X)+(size.X/2);
+        y = (pos.Y+inset.Y)+(size.Y/2);
+    }
+    VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,true,game,0);
+    task.wait(0.1);
+    VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,false,game,0);
+
+	--[[for i,v in pairs(getconnections(btn.MouseButton1Click)) do
 		v.Function()
-	end
+	end]]
+end
+
+local function safeClick(part)
+    if (Player.Character.HumanoidRootPart.Position - part.WorldPivot.Position).Magnitude <= 10 then
+        local posOnC = workspace.Camera:WorldToScreenPoint(part.Position);
+        local inset = GuiService:GetGuiInset();
+        local center = {
+            x = (posOnC.X+inset.X)+(part.Size.X/2);
+            y = (posOnC.Y+inset.Y)+(part.Size.Y/2);
+        }
+        VirtualInputManager:SendMouseMoveEvent(center.x,center.y,game);
+        task.wait(0.1);
+        VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,true,game,0);
+        task.wait(0.1);
+        VirtualInputManager:SendMouseButtonEvent(center.x,center.y,0,false,game,0);
+    end
 end
 
 local AutoMachinesToggle = Machines.Toggle({
     Text = "Auto Machines",
     Callback = function(Value)
         AutoMachines = Value
+
+        if Value == false then
+            CanEat = true
+        end
 
         while AutoMachines and CheckFatigue() do
             local Success, Error = pcall(function()
@@ -656,8 +706,7 @@ local AutoMachinesToggle = Machines.Toggle({
                         local Machine = GetMachine(MachineType)
                         if Machine and not Eating then
                             fireclickdetector(Machine.ClickDetector)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                            safeClick(Machine)
                             task.wait(.25)
                         else
                             task.wait(2.5)
@@ -704,8 +753,7 @@ local AutoMachinesToggle = Machines.Toggle({
                         local Machine = GetMachine(MachineType)
                         if Machine and not Eating then
                             fireclickdetector(Machine.ClickDetector)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,true,game,0)
-                            VirtualInputManager:SendMouseButtonEvent(Mouse.ViewSizeX/2,Mouse.ViewSizeY/2,0,false,game,0)
+                            safeClick(Machine)
                             task.wait(.25)
                         else
                             task.wait(2.5)
@@ -717,6 +765,7 @@ local AutoMachinesToggle = Machines.Toggle({
             if Error then
                 print(Error)
             end
+            task.wait()
         end
     end,
     Enabled = false
@@ -854,6 +903,7 @@ local AutoEatToggle = Food.Toggle({
                 Eating = true
 
                 if not GetFood() then
+                    SendWebhook(" Ran Out Of Food At " .. os.date())
                     PlaySound()
                     if Kick then
                         Player:Kick("Ran Out Of Food At " .. os.date())
@@ -908,7 +958,7 @@ local DuraToggle = Dura.Toggle({
     Callback = function(Value)
         AutoDura = Value
 
-        while AutoDura do
+        while AutoDura and CheckFatigue() do
             task.wait(.5)
 
             if DuraFirst == nil then return end
@@ -1101,9 +1151,11 @@ local Trigger = Misc.Toggle({
                     if Player.PlayerGui.MainGui.Utility.CombatTag.Visible == true and not CombatDebouce and not AutoDura then
                         CombatDebouce = true
                         local NearPlayers = GetNearPlayers()
+                        SendWebhook(" You were put in combat at " .. os.date())
                         PlaySound()
 
                         for i,v in pairs(NearPlayers) do
+                            SendWebhook(" You were put in combat by " .. v.Name .. ' ('.. v.Character.Humanoid.DisplayName.. ') '.. v.UserId)
                             task.wait()
                         end
 
@@ -1118,6 +1170,7 @@ local Trigger = Misc.Toggle({
             task.spawn(function()
                 local EventGrip = Player.Character.Humanoid.Died:Connect(function()
                     PlaySound()
+                    SendWebhook(' You were gripped at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     if Kick then
                         task.wait(10)
                         Player:Kick('You were gripped at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
@@ -1131,6 +1184,7 @@ local Trigger = Misc.Toggle({
                     if Part.Name == "Mounted" then
                         Mounter = Player.Character.Mounted.Value
                         PlaySound() 
+                        SendWebhook(' You were mounted at '.. os.date().. ' By: '.. Mounter.Name.. ' ('.. Mounter.Humanoid.DisplayName.. ') '.. Players:FindFirstChild(Mounter.Name).UserId)
                     end
                 end)
                 table.insert(Triggers, EventMount)
@@ -1178,7 +1232,7 @@ local AutoEXP = Misc.Toggle({
                             end
                         end
                         pcall(function()
-                            v.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-4.5)
+                            v.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-4)
                             v.HumanoidRootPart.AssemblyAngularVelocity = Vector3.new(17.325,17.325,17.325)
                             v.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(17.325,17.325,17.325)
                         end)
@@ -1308,6 +1362,7 @@ end)
 
 table.insert(Events, PlayerListRemoved)
 
+
 local Group = game:GetService("GroupService")
 local groupID = 4800422
 
@@ -1346,6 +1401,8 @@ Commands.kick = function(Sender, Arguments)
     
         if Username == string.lower(Player.Name) then
             Player:Kick(Message)
+    
+            SendWebhook(' You were kicked at '.. os.date().. ' By: '.. Sender.Name.. ' For: ' .. Message)
         end
     end
 end
@@ -1403,15 +1460,10 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
         for _, value in pairs(Result) do
             if value["Id"] == groupID then
                 if value["Role"] == "Mod" or value["Role"] == "Associates." or value["Role"] == "Owner" then
-                    AutoCook = false
-                    AutoStrikePower = false
-                    AutoStrikeSpeed = false
-                    AutoMachines = false
-                    AutoEat = false
-                    AutoDura = false
                     print(value["Role"]) -- prints the Role of the player
                     print(value["Rank"]) -- prints the Rank of the player
                     print(Player.Name)
+                    SendWebhook(Player.Name .. " " .. PlayerID .. " " .. value["Role"] .. " has Joined you at " .. os.date())
                     PlaySound()
                 end
             end
@@ -1424,12 +1476,7 @@ local PlayersJoined = Players.PlayerAdded:Connect(function(Player)
                 end)
                 if Success then
                     if Result > 99 then
-                        AutoCook = false
-                        AutoStrikePower = false
-                        AutoStrikeSpeed = false
-                        AutoMachines = false
-                        AutoEat = false
-                        AutoDura = false
+                        SendWebhook(v.Name .. " " .. v.PlayerId .. " has Joined you at " .. os.date())
                         PlaySound()
                     end
                 end
