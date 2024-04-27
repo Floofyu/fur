@@ -327,6 +327,7 @@ local function StartRun()
         task.wait(.1)
         VirtualInputManager:SendKeyEvent(false, "W", false, game)
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
+        task.wait(.1)
     end
 end
 
