@@ -472,8 +472,6 @@ local AutoSPToggle = Home.Toggle({
                     task.wait(.1)
                 until BodyHeat >= (TargetBodyHeat + 5) or not AutoStrikePower or Stamina <= MinStam or Eating or not CheckFatigue()
 
-                task.wait("Finished Running | Stopped")
-
                 if CheckIfRunning() then 
                     VirtualInputManager:SendKeyEvent(false, "W", false, game)
                     VirtualInputManager:SendKeyEvent(false, "S", false, game)
