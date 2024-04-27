@@ -324,10 +324,10 @@ local function StartRun()
     if not CheckIfRunning() then
         VirtualInputManager:SendKeyEvent(true, "S", false, game)
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
-        task.wait(.1)
+        task.wait(.15)
         VirtualInputManager:SendKeyEvent(false, "W", false, game)
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
-        task.wait(.1)
+        task.wait(.3)
     end
 end
 
@@ -469,6 +469,8 @@ local AutoSPToggle = Home.Toggle({
                     BodyHeat = (Player.Character.BodyHeat.Value/Player.Character.BodyHeat.Max.Value) * 100
                     task.wait()
                 until BodyHeat >= (TargetBodyHeat + 5) or not AutoStrikePower or Stamina <= MinStam or Eating or not CheckFatigue()
+
+                task.wait("Finished Running | Stopped")
 
                 VirtualInputManager:SendKeyEvent(false, "W", false, game)
                 VirtualInputManager:SendKeyEvent(false, "S", false, game)
