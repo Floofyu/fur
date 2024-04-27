@@ -464,16 +464,18 @@ local AutoSPToggle = Home.Toggle({
 
             if BodyHeat <= TargetBodyHeat and not Eating and CheckFatigue() then
                 repeat  
-                    StartRun()
+                    if not CheckIfRunning() then StartRun() end
                     Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
                     BodyHeat = (Player.Character.BodyHeat.Value/Player.Character.BodyHeat.Max.Value) * 100
-                    task.wait()
+                    task.wait(.25)
                 until BodyHeat >= (TargetBodyHeat + 5) or not AutoStrikePower or Stamina <= MinStam or Eating or not CheckFatigue()
 
                 task.wait("Finished Running | Stopped")
 
-                VirtualInputManager:SendKeyEvent(false, "W", false, game)
-                VirtualInputManager:SendKeyEvent(false, "S", false, game)
+                if CheckIfRunning() then 
+                    VirtualInputManager:SendKeyEvent(false, "W", false, game)
+                    VirtualInputManager:SendKeyEvent(false, "S", false, game)
+                end
 
             elseif BodyHeat >= TargetBodyHeat and Stamina >= MaxStam and not Eating and CheckFatigue() then
                 local Combat = GetCombat()
