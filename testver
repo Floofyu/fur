@@ -330,7 +330,6 @@ local function StartRun()
         task.wait(.2)
         VirtualInputManager:SendKeyEvent(false, "W", false, game)
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
-        task.wait(.5)
     end
 end
 
@@ -470,7 +469,7 @@ local AutoSPToggle = Home.Toggle({
                     if not CheckIfRunning() then StartRun() end
                     Stamina = (Player.Character.CurrentStamina.Value/Player.Character.MaxStamina.Value) * 100
                     BodyHeat = (Player.Character.BodyHeat.Value/Player.Character.BodyHeat.Max.Value) * 100
-                    task.wait(.25)
+                    task.wait(.1)
                 until BodyHeat >= (TargetBodyHeat + 5) or not AutoStrikePower or Stamina <= MinStam or Eating or not CheckFatigue()
 
                 task.wait("Finished Running | Stopped")
