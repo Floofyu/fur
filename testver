@@ -1,4 +1,4 @@
--- Made by vib_y uwu
+-- Mobile Version | Made by vib_y uwu
 
 local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 
@@ -330,6 +330,7 @@ local function StartRun()
         task.wait(.2)
         VirtualInputManager:SendKeyEvent(false, "W", false, game)
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
+        task.wait(.5)
     end
 end
 
