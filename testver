@@ -1214,6 +1214,21 @@ local KickToggle = Misc.Toggle({
 })
 
 local AutoSkillXP = false
+local HealthParts = {}
+
+local function FireHealPad()
+    for i,v in pairs(HealthParts) do
+        local TimeUsed = v:GetAttribute("LastUsed") or 0
+    
+        if (os.clock() - TimeUsed) > 4 or not TimeUsed then
+            fireclickdetector(v.ClickDetector)
+            v:SetAttribute("LastUsed", os.clock())
+            task.wait(.5)
+        else
+            print("Waiting for CD")
+        end
+    end
+end
 
 local AutoEXP = Misc.Toggle({
     Text = "Auto Skill Exp",
@@ -1221,6 +1236,12 @@ local AutoEXP = Misc.Toggle({
         AutoSkillXP = Value
 
         if game.PlaceId ~= 6745592527 then return end
+
+        for i,v in pairs(workspace:GetChildren()) do
+            if v.Name == "HealthPart" then
+                table.insert(HealthParts, v)
+            end
+        end
 
         if AutoSkillXP then
             Player.Character.HumanoidRootPart.Anchored = true
@@ -1258,8 +1279,10 @@ local AutoEXP = Misc.Toggle({
                         if Tool then
                             Tool.Parent = Player.Character
                             Tool:Activate()
-                            task.wait(2.1)
+                            task.wait()
                             Tool.Parent = Player.Backpack
+                            
+                            FireHealPad()
                             else
                             print("No ToolFound")
                         end
