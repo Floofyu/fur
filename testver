@@ -1224,6 +1224,8 @@ local function FireHealPad()
             fireclickdetector(v.ClickDetector)
             v:SetAttribute("LastUsed", os.clock())
             task.wait(.5)
+
+            return true
         else
             print("Waiting for CD")
         end
