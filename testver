@@ -1285,6 +1285,8 @@ local AutoEXP = Misc.Toggle({
                             Tool.Parent = Player.Backpack
                             
                             FireHealPad()
+                            task.wait(.25)
+                            
                             else
                             print("No ToolFound")
                         end
