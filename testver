@@ -493,8 +493,8 @@ local AutoSPToggle = Home.Toggle({
                     Combat.Parent = Player.Character
                     Combat:Activate()
                     if UseM2 then
-                        VirtualInputManager:SendMouseButtonEvent(100,1,1,true,game,0)
-                        VirtualInputManager:SendMouseButtonEvent(100,1,1,false,game,0)
+                        VirtualInputManager:SendMouseButtonEvent(200,10,1,true,game,0)
+                        VirtualInputManager:SendMouseButtonEvent(200,10,1,false,game,0)
                     end
                     task.wait()
                 until BodyHeat <= TargetBodyHeat or Stamina <= MinStam or not AutoStrikePower or Eating or not CheckFatigue()
@@ -570,8 +570,8 @@ local AutoSSToggle = Home.Toggle({
                         Combat.Parent = Player.Character
                         Combat:Activate()
                         if UseM2 then
-                            VirtualInputManager:SendMouseButtonEvent(100,1,1,true,game,0)
-                            VirtualInputManager:SendMouseButtonEvent(100,1,1,false,game,0)
+                            VirtualInputManager:SendMouseButtonEvent(200,10,1,true,game,0)
+                            VirtualInputManager:SendMouseButtonEvent(200,10,1,false,game,0)
                         end
                         task.wait(SSTiming)
                         until not Player.PlayerGui:FindFirstChild("SpeedTraining") or Eating or not AutoStrikeSpeed
@@ -1045,8 +1045,8 @@ local DuraToggle = Dura.Toggle({
                             if Stamina >= 10 then
                                 Combat.Parent = Player.Character
                                 Combat:Activate()
-                                VirtualInputManager:SendMouseButtonEvent(1,1,1,true,game,0)
-                                VirtualInputManager:SendMouseButtonEvent(1,1,1,false,game,0)
+                                VirtualInputManager:SendMouseButtonEvent(200,10,1,true,game,0)
+                                VirtualInputManager:SendMouseButtonEvent(200,10,1,false,game,0)
                             end
                             task.wait()
                         until not TempFirst.Character:FindFirstChild("DuraTrain") or OtherHealthPercent <= DuraHitUntil or not AutoDura
