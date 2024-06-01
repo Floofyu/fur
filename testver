@@ -356,6 +356,8 @@ local function CheckFatigue()
 
         repeat Fatigue, Numbers = string.gsub(Player.PlayerGui.MainGui.Utility.BodyFatigue.Text, "%D", "") task.wait(.5) until tonumber(Fatigue) <= 0
         
+        SendWebhook(" You Reached Zero Fatigue at " .. os.date())
+
         return false
     else
         return true
